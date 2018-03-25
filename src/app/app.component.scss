@@ -1,0 +1,42 @@
+@import '~@angular/material/theming';
+
+#sidenav {
+    @include mat-elevation(8);
+    width: 256px;
+
+    #logo {
+        height: 144px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid #e0e0e0;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        padding: 12px 0 40px 0;
+    }
+
+    #legal {
+        height: 72px;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0;
+        color: #212121;
+        font-size: 13px;
+        padding: 24px;
+    }
+}
+
+#toolbar {
+    @include mat-elevation(4);
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
