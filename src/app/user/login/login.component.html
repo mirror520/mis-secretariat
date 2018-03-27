@@ -1,0 +1,28 @@
+<main>
+  <h2>請選擇登入方式</h2>
+  <mat-tab-group *ngIf="!currentUser" (selectChange)="selectChangeHandler($event)">
+    <mat-tab label="系統帳號">
+      <form id="user-login-form" [formGroup]="userLoginFormGroup" 
+            (ngSubmit)="loginUser(username.value, password.value)">
+        <mat-form-field>
+          <input #username matInput placeholder="使用者名稱" formControlName="username">
+        </mat-form-field>
+        <mat-form-field>
+          <input #password matInput placeholder="密碼" formControlName="password"
+                 [type]="hide ? 'password' : 'text'">
+          <mat-icon matSuffix (click)="hide = !hide">
+            {{ hide ? 'visibility' : 'visibility_off'}}
+          </mat-icon>
+        </mat-form-field>
+        <button mat-raised-button [disabled]="userLoginFormGroup.invalid">登入</button> 
+      </form>
+    </mat-tab>
+    <mat-tab label="公務帳號" disabled>
+    </mat-tab>
+    <mat-tab label="自然人憑證" disabled>
+    </mat-tab>
+  </mat-tab-group>
+  <mat-card *ngIf="currentUser">
+    <pre>{{ currentUser | json }}</pre>
+  </mat-card>
+</main>

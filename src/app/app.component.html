@@ -1,8 +1,8 @@
 <mat-sidenav-container fullscreen>
   <header>
     <mat-toolbar id="toolbar" color="primary">
-      <button mat-icon-button matTooltip="開啟選單" 
-              *ngIf="!(width > 1440)" 
+      <button *ngIf="!(width > 1440)" 
+              mat-icon-button matTooltip="開啟選單" 
               (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -11,7 +11,12 @@
       <button mat-icon-button matTooltip="搜尋">
         <mat-icon>search</mat-icon>
       </button>
-      <button mat-button>登入</button>
+      <button *ngIf="!currentUser" mat-button routerLink="/login">登入</button>
+      <button *ngIf="currentUser" 
+              mat-icon-button matTooltip="個人資訊" 
+              (click)="logout()">
+        <mat-icon>account_circle</mat-icon>
+      </button>
     </mat-toolbar>
   </header>
 
@@ -22,7 +27,7 @@
       資訊管理系統
     </div>
     <mat-nav-list>
-      <a mat-list-item>社交工程演練</a>
+      <a mat-list-item routerLink="/seit">社交工程演練</a>
       <a mat-list-item>考績委員會投票</a>
     </mat-nav-list>
     <div id="legal">
@@ -33,7 +38,5 @@
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-container>
-    <router-outlet></router-outlet>
-  </mat-sidenav-container>
+  <router-outlet></router-outlet>
 </mat-sidenav-container>
