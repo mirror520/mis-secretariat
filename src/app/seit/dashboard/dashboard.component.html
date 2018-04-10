@@ -1,5 +1,99 @@
 <main>
-  <p>
-    dashboard works!
-  </p>
+  <mat-card>
+    <mat-card-header>
+        <mat-form-field>
+          <mat-select placeholder="演練機關" [(ngModel)]="selectedInstitution">
+            <mat-option>請選擇演練機關</mat-option>
+            <mat-optgroup *ngFor="let session of sessions | async" 
+                          [label]="session.session">
+              <mat-option *ngFor="let institution of session.institutions" 
+                          [value]="institution" [disabled]="institution.disabled">
+                {{ institution.institution }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+    </mat-card-header>
+    <mat-card-content *ngIf="selectedInstitution">
+      <button mat-button 
+             *ngFor="let department of (currentInstitution | async)?.departments" 
+             (click)="currentDepartment = department">
+        {{ department.department }}
+      </button>
+
+      <mat-table [dataSource]="userDataProvider">
+        <ng-container matColumnDef="tuid">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">No.： </span>
+            {{ row.tuid }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> 接收者 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">接收者： </span>
+            {{ row.name }} 
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_time">
+          <mat-header-cell *matHeaderCellDef> 傳送時間 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">傳送時間： </span>
+            {{ (row.seit_mail.delivery_time) ? (row.seit_mail.delivery_time | date: 'y/MM/dd HH:mm:ss') : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fail_time">
+          <mat-header-cell *matHeaderCellDef> 觸發時間 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">觸發時間： </span>
+            <a class="fail_time" 
+               *ngIf="row.seit_mail.fail_time">
+              {{ (row.seit_mail.fail_time) ? (row.seit_mail.fail_time | date: 'y/MM/dd HH:mm:ss') : '' }}
+            </a>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="mail_status">
+          <mat-header-cell *matHeaderCellDef> 郵件狀態 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-chip-list [ngSwitch]="row.seit_mail.mail_status">
+              <span class="mobile-label">郵件狀態： </span>
+              <mat-chip *ngSwitchCase="'ready'"> 準備中 </mat-chip>
+              <mat-chip *ngSwitchCase="'delivered'" color="accent" selected> 已傳送 </mat-chip>
+              <mat-chip *ngSwitchCase="'failure'" color="warn" selected> 傳送失敗 </mat-chip>
+              <mat-chip *ngSwitchCase="'readed'" color="warn" selected> 已讀取 </mat-chip>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="test_status">
+          <mat-header-cell *matHeaderCellDef> 測試狀態 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-chip-list [ngSwitch]="row.seit_mail.test_status">
+              <span class="mobile-label">測試狀態： </span>
+              <mat-chip *ngSwitchCase="'unknown'"> 未知 </mat-chip>
+              <mat-chip *ngSwitchCase="'fail'" color="warn" selected> 失敗 </mat-chip>
+              <mat-chip *ngSwitchCase="'correct'" color="warn" selected> 已修正 </mat-chip>
+            </mat-chip-list>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <mat-header-cell *matHeaderCellDef> 動作 </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="mobile-label">動作： </span>
+            <button mat-raised-button color="accent" 
+                    *ngIf="row.seit_mail.test_status == 'fail'"> 修正 </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </mat-card-content>
+  </mat-card>
 </main>

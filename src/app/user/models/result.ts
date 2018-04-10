@@ -29,6 +29,6 @@ export class Result {
         return this._time;
     }
     public set time(value: number) {
-        this._time = value;
+        this._time = value * 1000;
     }
 }

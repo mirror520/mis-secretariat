@@ -32,7 +32,7 @@ export class Token {
         return this._expires_in;
     }
     public set expires_in(value: number) {
-        this._expires_in = value;
+        this._expires_in = value * 1000;
     }
 
     public get refresh_token(): string {
